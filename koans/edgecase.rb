@@ -2,10 +2,7 @@
 # -*- ruby -*-
 
 require 'test/unit/assertions'
-begin 
-  require 'win32console'
-rescue LoadError
-end
+
 # --------------------------------------------------------------------
 # Support code for the Ruby Koans.
 # --------------------------------------------------------------------
@@ -24,7 +21,7 @@ def in_ruby_version(*versions)
 end
 
 # Standard, generic replacement value.
-# If value19 is given, it is used in place of value for Ruby 1.9.
+# If value19 is given, it is used inplace of value for Ruby 1.9.
 def __(value="FILL ME IN", value19=:mu)
   if RUBY_VERSION < "1.9"
     value
@@ -110,9 +107,7 @@ module EdgeCase
     def use_colors?
       return false if ENV['NO_COLOR']
       if ENV['ANSI_COLOR'].nil?
-        if using_windows?
-          using_win32console
-        end
+        ! using_windows?
       else
         ENV['ANSI_COLOR'] =~ /^(t|y)/i
       end
@@ -120,9 +115,6 @@ module EdgeCase
 
     def using_windows?
       File::ALT_SEPARATOR
-    end
-    def using_win32console
-      defined? Win32::Console
     end
   end
 
@@ -220,6 +212,9 @@ module EdgeCase
       end
       print Color.green(']')
       print " #{pass_count}/#{total_tests}"
+      p = (pass_count.to_f/total_tests)*100
+      percentage = (p * 10**2).round.to_f / 10**2
+      print Color.cyan("  #{percentage}%")
       puts
     end
 
